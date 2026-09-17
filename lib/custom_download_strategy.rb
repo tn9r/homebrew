@@ -104,15 +104,10 @@ class CustomGitHubPrivateRepositoryReleaseDownloadStrategy < CustomGitHubPrivate
   end
 
   def resolve_asset_id
-    release_metadata = fetch_release_metadata
+    release_metadata = GitHub.get_release(@owner, @repo, @tag)
     assets = release_metadata["assets"].select { |a| a["name"] == @filename }
     raise CurlDownloadStrategyError, "Asset '#{@filename}' not found in release '#{@tag}'." if assets.empty?
 
     assets.first["id"]
-  end
-
-  def fetch_release_metadata
-    release_url = "https://api.github.com/repos/#{@owner}/#{@repo}/releases/tags/#{@tag}"
-    GitHub.open_api(release_url)
   end
 end
