@@ -1,4 +1,4 @@
-require_relative "../custom_download_strategy"
+require_relative "../lib/custom_download_strategy"
 
 cask "kinetic" do
   version "0.3.0"
@@ -10,7 +10,7 @@ cask "kinetic" do
   desc "Pure Swift motion graphics studio for macOS"
   homepage "https://github.com/narrino/kinetic"
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "Kinetic.app"
   binary "#{appdir}/Kinetic.app/Contents/Helpers/kinetic", target: "kinetic"

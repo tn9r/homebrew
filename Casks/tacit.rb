@@ -1,4 +1,4 @@
-require_relative "../custom_download_strategy"
+require_relative "../lib/custom_download_strategy"
 
 cask "tacit" do
   version "0.8.0"
@@ -10,7 +10,7 @@ cask "tacit" do
   desc "A quiet layer underneath your typing on macOS"
   homepage "https://github.com/freetis/Tacit"
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "Tacit.app"
   binary "#{appdir}/Tacit.app/Contents/MacOS/Tacit", target: "tacit"

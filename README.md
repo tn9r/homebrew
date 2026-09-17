@@ -14,7 +14,7 @@ Personal Homebrew Tap for macOS applications across personal and organization wo
 
 ### 1. Tap this repository
 ```bash
-brew tap tn9r/homebrew
+brew tap tn9r/homebrew https://github.com/tn9r/homebrew.git
 ```
 
 ### 2. Authentication (for Private Releases)

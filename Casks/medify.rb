@@ -1,4 +1,4 @@
-require_relative "../custom_download_strategy"
+require_relative "../lib/custom_download_strategy"
 
 cask "medify" do
   version "1.0.0"
@@ -10,7 +10,7 @@ cask "medify" do
   desc "Personal media center & podcast library for macOS"
   homepage "https://github.com/tn9r/medify"
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "Medify.app"
 
