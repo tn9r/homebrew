@@ -35,9 +35,8 @@ class CustomGitHubPrivateRepositoryDownloadStrategy < CurlDownloadStrategy
     if @github_token.to_s.empty?
       keychain_out = `/usr/bin/security find-generic-password -s "gh:github.com" -w 2>/dev/null`.strip
       if keychain_out.start_with?("go-keyring-base64:")
-        require "base64"
         b64 = keychain_out.sub("go-keyring-base64:", "")
-        @github_token = Base64.decode64(b64).strip
+        @github_token = b64.unpack1("m").strip
       elsif !keychain_out.empty?
         @github_token = keychain_out
       end
