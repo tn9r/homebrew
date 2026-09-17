@@ -24,8 +24,9 @@ class CustomGitHubPrivateRepositoryDownloadStrategy < CurlDownloadStrategy
 
   private
 
-  def _fetch(url:, resolved_url:)
-    curl_download download_url, "--header", "Authorization: token #{@github_token}", to: temporary_path
+  def _fetch(url:, resolved_url:, timeout: nil, **options)
+    curl_download download_url, "--header", "Authorization: token #{@github_token}",
+                                to: temporary_path, timeout: timeout, **options
   end
 
   def set_github_token
@@ -92,10 +93,10 @@ class CustomGitHubPrivateRepositoryReleaseDownloadStrategy < CustomGitHubPrivate
 
   private
 
-  def _fetch(url:, resolved_url:)
+  def _fetch(url:, resolved_url:, timeout: nil, **options)
     curl_download download_url, "--header", "Accept: application/octet-stream",
                                 "--header", "Authorization: token #{@github_token}",
-                                to: temporary_path
+                                to: temporary_path, timeout: timeout, **options
   end
 
   def asset_id
