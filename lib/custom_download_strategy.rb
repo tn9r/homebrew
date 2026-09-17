@@ -30,9 +30,30 @@ class CustomGitHubPrivateRepositoryDownloadStrategy < CurlDownloadStrategy
 
   def set_github_token
     @github_token = ENV["HOMEBREW_GITHUB_API_TOKEN"] || ENV["GITHUB_TOKEN"]
+
+    # Fallback 1: read from macOS Keychain (where gh auth stores it on macOS)
     if @github_token.to_s.empty?
-      token_from_gh = `gh auth token 2>/dev/null`.strip
-      @github_token = token_from_gh unless token_from_gh.empty?
+      keychain_out = `/usr/bin/security find-generic-password -s "gh:github.com" -w 2>/dev/null`.strip
+      if keychain_out.start_with?("go-keyring-base64:")
+        require "base64"
+        b64 = keychain_out.sub("go-keyring-base64:", "")
+        @github_token = Base64.decode64(b64).strip
+      elsif !keychain_out.empty?
+        @github_token = keychain_out
+      end
+    end
+
+    # Fallback 2: try `gh auth token` via login shell or common paths
+    if @github_token.to_s.empty?
+      for gh_cmd in ["/opt/homebrew/bin/gh", "/usr/local/bin/gh", File.expand_path("~/.local/bin/gh")]
+        if File.executable?(gh_cmd)
+          t = `#{gh_cmd} auth token 2>/dev/null`.strip
+          if !t.empty?
+            @github_token = t
+            break
+          end
+        end
+      end
     end
 
     if @github_token.to_s.empty?
