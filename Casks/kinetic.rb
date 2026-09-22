@@ -1,7 +1,7 @@
 require_relative "../lib/custom_download_strategy"
 
 cask "kinetic" do
-  version "0.4.1"
+  version "0.5.0"
   sha256 :no_check
 
   url "https://github.com/narrino/kinetic/releases/download/v#{version}/Kinetic-#{version}.zip",
@@ -17,6 +17,7 @@ cask "kinetic" do
 
   zap trash: [
     "~/Library/Application Support/com.kinetic.studio",
+    "~/Library/Caches/Kinetic",
     "~/Library/Preferences/com.kinetic.studio.plist",
   ]
 end
