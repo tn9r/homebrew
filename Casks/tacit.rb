@@ -12,18 +12,16 @@ cask "tacit" do
 
   depends_on macos: :sonoma
 
-  preflight do
-    # Stop the running LaunchAgent and kill any active process before the bundle is replaced
-    system_command "/bin/launchctl", args: ["bootout", "gui/#{Process.uid}/com.freetis.tacit"], print_stderr: false
-    system_command "/usr/bin/pkill", args: ["-9", "-f", "#{appdir}/Tacit.app/Contents/MacOS/Tacit"], print_stderr: false
+  preflight_steps do
+    run "/bin/launchctl", args: ["bootout", "gui/#{Process.uid}/com.freetis.tacit"], must_succeed: false
+    terminate_process "Tacit", match: :name, must_succeed: false
   end
 
   app "Tacit.app"
   binary "#{appdir}/Tacit.app/Contents/MacOS/Tacit", target: "tacit"
 
-  postflight do
-    # Restart the background service with the newly installed binary
-    system_command "#{appdir}/Tacit.app/Contents/MacOS/Tacit", args: ["install"], print_stderr: false
+  postflight_steps do
+    run "{{appdir}}/Tacit.app/Contents/MacOS/Tacit", args: ["install"], must_succeed: false
   end
 
   uninstall launchctl: "com.freetis.tacit",
