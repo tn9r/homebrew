@@ -1,7 +1,7 @@
 require_relative "../lib/custom_download_strategy"
 
 cask "tacit" do
-  version "0.11.0"
+  version "0.12.0"
   sha256 :no_check
 
   url "https://github.com/freetis/Tacit/releases/download/v#{version}/Tacit-#{version}.zip",
